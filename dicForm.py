@@ -4,7 +4,7 @@ import csv
 import itertools
 
 base_path = os.path.dirname(os.path.realpath(__file__))
-xml_file = os.path.join(base_path, "data\\dic.xml")
+xml_file = os.path.join(base_path, "new_data\\dic.xml")
 
 tree = et.parse(xml_file)
 root =  tree.getroot()

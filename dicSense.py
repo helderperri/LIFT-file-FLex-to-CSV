@@ -5,7 +5,7 @@ import itertools
 
 
 base_path = os.path.dirname(os.path.realpath(__file__))
-xml_file = os.path.join(base_path, "data\\dic.xml")
+xml_file = os.path.join(base_path, "new_data\\dic.xml")
 
 tree = et.parse(xml_file)
 root =  tree.getroot()
@@ -14,7 +14,7 @@ def encode(self,input,errors='strict'):
     return codecs.charmap_encode(input,errors,encoding_table)
 
 with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
-    fieldnames = ['word', 'dateCreated', 'dateModified', 'guid', 'id', 'morph_type', 'sense_id', 'sense_number', 'grammatical_info', 'scientific_name', 'gloss_pt', 'gloss_en', 'gloss_es', 'definition_pt', 'definition_en', 'definition_es', 'example_number', 'example_ver', 'free_pt', 'free_en', 'free_es']
+    fieldnames = ['word', 'dateCreated', 'dateModified', 'guid', 'id', 'morph_type', 'sense_id', 'sense_number', 'grammatical_info', 'scientific_name', 'gloss_pt', 'gloss_en', 'gloss_es', 'gloss_fr', 'definition_pt', 'definition_en', 'definition_es', 'definition_fr', 'example_number', 'example_ver', 'free_pt', 'free_en', 'free_es', 'free_fr']
     csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
     # csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=';')
     csv_writer.writeheader()
@@ -26,14 +26,17 @@ with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
             gloss_pt = ""
             gloss_en = ""
             gloss_es = ""
+            gloss_fr = ""
             definition_pt = ""
             definition_en = ""
             definition_es = ""
+            definition_fr = ""
             example_number = ""
             example_ver = ""
             free_pt = ""
             free_en = ""
             free_es = ""
+            free_fr = ""
 
             try:
                 check_dateCreated = entry.attrib["dateCreated"]
@@ -92,7 +95,7 @@ with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
             check_sense = entry.find("sense")
             if check_sense is None:
                 try:
-                    csv_writer.writerow({'word':word, 'dateCreated':dateCreated, 'dateModified':dateModified, 'guid':guid, 'id':id, 'morph_type':morph_type, "sense_id":sense_id, 'sense_number':sense_number, 'grammatical_info':grammatical_info, 'scientific_name':scientific_name, 'gloss_pt':gloss_pt, 'gloss_en':gloss_en, 'gloss_es':gloss_es, 'definition_pt':definition_pt, 'definition_en':definition_en, 'definition_es':definition_es, 'example_number':example_number, 'example_ver':example_ver, 'free_pt':free_pt, 'free_en':free_en, 'free_es':free_es})
+                    csv_writer.writerow({'word':word, 'dateCreated':dateCreated, 'dateModified':dateModified, 'guid':guid, 'id':id, 'morph_type':morph_type, "sense_id":sense_id, 'sense_number':sense_number, 'grammatical_info':grammatical_info, 'scientific_name':scientific_name, 'gloss_pt':gloss_pt, 'gloss_en':gloss_en, 'gloss_es':gloss_es, 'gloss_fr':gloss_fr, 'definition_pt':definition_pt, 'definition_en':definition_en, 'definition_es':definition_es, 'definition_fr':definition_fr, 'example_number':example_number, 'example_ver':example_ver, 'free_pt':free_pt, 'free_en':free_en, 'free_es':free_es, 'free_fr':free_fr})
                     print(id)
 
                 except:
@@ -160,6 +163,14 @@ with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
                         except:
                             pass
 
+                        try:
+                            check_gloss_fr = sense.find("gloss[@lang='fr']")
+                            if check_gloss_fr is None:
+                                gloss_fr = ""
+                            else:
+                                gloss_fr = sense.find("gloss[@lang='fr']").find("text").text
+                        except:
+                            pass
 
                         check_definition = sense.find("definition")
 
@@ -167,6 +178,8 @@ with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
                             definition_pt = ""
                             definition_en = ""
                             definition_es = ""
+                            definition_fr = ""
+
 
                         else:
                             try:
@@ -196,6 +209,15 @@ with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
                             except:
                                 pass
 
+                            try:
+                                check_definition_fr = sense.find("definition").find("form[@lang='fr']")
+                                if check_definition_es is None:
+                                    definition_fr = ""
+                                else:
+                                    definition_fr = sense.find("definition").find("form[@lang='fr']").find("text").text
+                            except:
+                                pass
+
                         check_example = sense.find("example")
 
                         if check_example is None:
@@ -205,7 +227,8 @@ with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
                                 free_pt = ""
                                 free_en = ""
                                 free_es = ""
-                                csv_writer.writerow({'word':word, 'dateCreated':dateCreated, 'dateModified':dateModified, 'guid':guid, 'id':id, 'morph_type':morph_type, "sense_id":sense_id, 'sense_number':sense_number, 'grammatical_info':grammatical_info, 'scientific_name':scientific_name, 'gloss_pt':gloss_pt, 'gloss_en':gloss_en, 'gloss_es':gloss_es, 'definition_pt':definition_pt, 'definition_en':definition_en, 'definition_es':definition_es, 'example_number':example_number, 'example_ver':example_ver, 'free_pt':free_pt, 'free_en':free_en, 'free_es':free_es})
+                                free_fr = ""
+                                csv_writer.writerow({'word':word, 'dateCreated':dateCreated, 'dateModified':dateModified, 'guid':guid, 'id':id, 'morph_type':morph_type, "sense_id":sense_id, 'sense_number':sense_number, 'grammatical_info':grammatical_info, 'scientific_name':scientific_name, 'gloss_pt':gloss_pt, 'gloss_en':gloss_en, 'gloss_es':gloss_es, 'gloss_fr':gloss_fr, 'definition_pt':definition_pt, 'definition_en':definition_en, 'definition_es':definition_es, 'definition_fr':definition_fr, 'example_number':example_number, 'example_ver':example_ver, 'free_pt':free_pt, 'free_en':free_en, 'free_es':free_es, 'free_fr':free_fr})
                                 print(id)
                             except:
                                 pass
@@ -229,32 +252,55 @@ with open('dicSense.csv', 'w', encoding="utf-8", newline='') as new_file:
                                         pass
 
                                     try:
-                                        check_free_pt = example.find("translation").find("form[@lang='pt']")
-                                        if check_free_pt is None:
+                                        check_trans = example.find("translation")
+                                        if check_trans is None:
                                             free_pt = ""
+                                            free_en = ""
+                                            free_es = ""
+                                            free_fr = ""
+                                            csv_writer.writerow({'word':word, 'dateCreated':dateCreated, 'dateModified':dateModified, 'guid':guid, 'id':id, 'morph_type':morph_type, "sense_id":sense_id, 'sense_number':sense_number, 'grammatical_info':grammatical_info, 'scientific_name':scientific_name, 'gloss_pt':gloss_pt, 'gloss_en':gloss_en, 'gloss_es':gloss_es, 'gloss_fr':gloss_fr, 'definition_pt':definition_pt, 'definition_en':definition_en, 'definition_es':definition_es, 'definition_fr':definition_fr, 'example_number':example_number, 'example_ver':example_ver, 'free_pt':free_pt, 'free_en':free_en, 'free_es':free_es, 'free_fr':free_fr})
+                                            print(id)
+
                                         else:
-                                            free_pt = example.find("translation").find("form[@lang='pt']").find("text").text
-                                    except:
-                                        pass
-                                    try:
-                                        check_free_en = example.find("translation").find("form[@lang='en']")
-                                        if check_free_pt is None:
-                                            free_pt = ""
-                                        else:
-                                            free_pt = example.find("translation").find("form[@lang='pt']").find("text").text
-                                    except:
-                                        pass
-                                    try:
-                                        check_free_es = example.find("translation").find("form[@lang='es']")
-                                        if check_free_pt is None:
-                                            free_pt = ""
-                                        else:
-                                            free_pt = example.find("translation").find("form[@lang='pt']").find("text").text
+                                            try:
+                                                check_free_pt = example.find("translation").find("form[@lang='pt']")
+                                                if check_free_pt is None:
+                                                    free_pt = ""
+                                                else:
+                                                    free_pt = example.find("translation").find("form[@lang='pt']").find("text").text
+                                            except:
+                                                pass
+                                            try:
+                                                check_free_en = example.find("translation").find("form[@lang='en']")
+                                                if check_free_en is None:
+                                                    free_en = ""
+                                                else:
+                                                    free_en = example.find("translation").find("form[@lang='en']").find("text").text
+                                            except:
+                                                pass
+                                            try:
+                                                check_free_es = example.find("translation").find("form[@lang='es']")
+                                                if check_free_pt is None:
+                                                    free_es = ""
+                                                else:
+                                                    free_es = example.find("translation").find("form[@lang='es']").find("text").text
+                                            except:
+                                                pass
+                                            try:
+                                                check_free_fr = example.find("translation").find("form[@lang='fr']")
+                                                if check_free_fr is None:
+                                                    free_fr = ""
+                                                else:
+                                                    free_fr = example.find("translation").find("form[@lang='fr']").find("text").text
+                                            except:
+                                                pass
+                                            csv_writer.writerow({'word':word, 'dateCreated':dateCreated, 'dateModified':dateModified, 'guid':guid, 'id':id, 'morph_type':morph_type, "sense_id":sense_id, 'sense_number':sense_number, 'grammatical_info':grammatical_info, 'scientific_name':scientific_name, 'gloss_pt':gloss_pt, 'gloss_en':gloss_en, 'gloss_es':gloss_es, 'gloss_fr':gloss_fr, 'definition_pt':definition_pt, 'definition_en':definition_en, 'definition_es':definition_es, 'definition_fr':definition_fr, 'example_number':example_number, 'example_ver':example_ver, 'free_pt':free_pt, 'free_en':free_en, 'free_es':free_es, 'free_fr':free_fr})
+                                            print(id)
+
                                     except:
                                         pass
 
-                                    csv_writer.writerow({'word':word, 'dateCreated':dateCreated, 'dateModified':dateModified, 'guid':guid, 'id':id, 'morph_type':morph_type, "sense_id":sense_id, 'sense_number':sense_number, 'grammatical_info':grammatical_info, 'scientific_name':scientific_name, 'gloss_pt':gloss_pt, 'gloss_en':gloss_en, 'gloss_es':gloss_es, 'definition_pt':definition_pt, 'definition_en':definition_en, 'definition_es':definition_es, 'example_number':example_number, 'example_ver':example_ver, 'free_pt':free_pt, 'free_en':free_en, 'free_es':free_es})
-                                    print(id)
+
                             except:
                                 pass
 
